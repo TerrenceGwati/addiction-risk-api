@@ -1,0 +1,314 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Drug Risk Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'riskapp/style.css' %}">
+</head>
+
+<body>
+
+<header>
+  <div class="badge">ML-Powered Screening Tool</div>
+  <h1>Student Drug Risk <em>Assessment</em></h1>
+  <p class="subtitle">
+    Answer the questions below to receive a personalised cannabis addiction
+    risk score based on personality and demographic research.
+  </p>
+</header>
+
+<main>
+
+  <div class="disclaimer">
+    <strong>Important:</strong> This tool is an indicative screening aid
+    based on the UCI Drug Consumption dataset and the Big Five personality
+    model. It is <strong>not a clinical diagnostic</strong> — results should
+    be interpreted by a qualified professional and treated as one input
+    among many.
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progress</span>
+      <span id="prog-text">0 / 12 answered</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill"></div>
+    </div>
+  </div>
+
+  <form method="post" id="risk-form">
+    {% csrf_token %}
+
+    <!-- ── Section 1: Demographics ────────────────────────── -->
+    <div class="section-heading">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">Demographics</div>
+        <div class="section-desc">Basic background information</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Age">
+        Age group
+        <span class="q-hint">Select the student's current age range</span>
+      </label>
+      <select name="Age" id="Age" required>
+        <option value="" disabled selected>Select age group…</option>
+        <option value="-0.95197">18 – 24</option>
+        <option value="-0.07854">25 – 34</option>
+        <option value="0.49788">35 – 44</option>
+        <option value="1.09449">45 – 54</option>
+        <option value="1.82213">55 – 64</option>
+        <option value="2.59171">65+</option>
+      </select>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Gender">
+        Gender
+        <span class="q-hint">As recorded in the study population</span>
+      </label>
+      <select name="Gender" id="Gender" required>
+        <option value="" disabled selected>Select gender…</option>
+        <option value="-0.48246">Male</option>
+        <option value="0.48246">Female</option>
+      </select>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Education">
+        Highest level of education
+      </label>
+      <select name="Education" id="Education" required>
+        <option value="" disabled selected>Select education level…</option>
+        <option value="-2.43591">Left school before 16</option>
+        <option value="-1.73790">Left school at 16</option>
+        <option value="-1.43719">Left school at 17</option>
+        <option value="-1.22751">Left school at 18</option>
+        <option value="-0.61113">Some college, no degree</option>
+        <option value="-0.05921">Professional certificate</option>
+        <option value="0.45468">University degree</option>
+        <option value="1.16365">Masters degree</option>
+        <option value="1.98437">Doctorate</option>
+      </select>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Country">
+        Country of residence
+      </label>
+      <select name="Country" id="Country" required>
+        <option value="" disabled selected>Select country…</option>
+        <option value="-0.09765">Australia</option>
+        <option value="0.24923">Canada</option>
+        <option value="-0.46841">New Zealand</option>
+        <option value="-0.28519">Other</option>
+        <option value="0.96082">UK</option>
+        <option value="-0.57009">Republic of Ireland</option>
+        <option value="0.46468">USA</option>
+      </select>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Ethnicity">
+        Ethnicity
+      </label>
+      <select name="Ethnicity" id="Ethnicity" required>
+        <option value="" disabled selected>Select ethnicity…</option>
+        <option value="-1.10702">Asian</option>
+        <option value="-1.65743">Black</option>
+        <option value="0.11440">Mixed-Black/Asian</option>
+        <option value="-0.31685">Mixed-White/Asian</option>
+        <option value="0.12600">Mixed-White/Black</option>
+        <option value="-0.22166">Other</option>
+        <option value="0.11308">White</option>
+      </select>
+    </div>
+
+    <!-- ── Section 2: Personality (Big Five) ─────────────── -->
+    <div class="section-heading">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">Personality Traits</div>
+        <div class="section-desc">Rate each trait from 1 (Very Low) to 10 (Very High)</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Nscore">
+        Neuroticism
+        <span class="q-hint">Tendency toward anxiety, moodiness, emotional instability</span>
+      </label>
+      <div class="slider-wrap">
+        <input type="range" name="Nscore" id="Nscore" min="1" max="10" value="5"
+               data-min="-3.46436" data-max="3.46436" required>
+        <span class="slider-val" id="Nscore-val">5</span>
+      </div>
+      <div class="slider-labels"><span>Very Low</span><span>Very High</span></div>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Escore">
+        Extraversion
+        <span class="q-hint">Tendency toward sociability, assertiveness, positive emotions</span>
+      </label>
+      <div class="slider-wrap">
+        <input type="range" name="Escore" id="Escore" min="1" max="10" value="5"
+               data-min="-3.27393" data-max="3.27393" required>
+        <span class="slider-val" id="Escore-val">5</span>
+      </div>
+      <div class="slider-labels"><span>Very Low</span><span>Very High</span></div>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Oscore">
+        Openness to Experience
+        <span class="q-hint">Curiosity, creativity, preference for novelty and variety</span>
+      </label>
+      <div class="slider-wrap">
+        <input type="range" name="Oscore" id="Oscore" min="1" max="10" value="5"
+               data-min="-3.27366" data-max="2.90161" required>
+        <span class="slider-val" id="Oscore-val">5</span>
+      </div>
+      <div class="slider-labels"><span>Very Low</span><span>Very High</span></div>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Ascore">
+        Agreeableness
+        <span class="q-hint">Cooperativeness, trust, empathy toward others</span>
+      </label>
+      <div class="slider-wrap">
+        <input type="range" name="Ascore" id="Ascore" min="1" max="10" value="5"
+               data-min="-3.46436" data-max="3.46436" required>
+        <span class="slider-val" id="Ascore-val">5</span>
+      </div>
+      <div class="slider-labels"><span>Very Low</span><span>Very High</span></div>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Cscore">
+        Conscientiousness
+        <span class="q-hint">Self-discipline, organisation, goal-directed behaviour</span>
+      </label>
+      <div class="slider-wrap">
+        <input type="range" name="Cscore" id="Cscore" min="1" max="10" value="5"
+               data-min="-3.46436" data-max="3.46436" required>
+        <span class="slider-val" id="Cscore-val">5</span>
+      </div>
+      <div class="slider-labels"><span>Very Low</span><span>Very High</span></div>
+    </div>
+
+    <!-- ── Section 3: Impulsivity & Sensation-Seeking ────── -->
+    <div class="section-heading">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">Behavioural Tendencies</div>
+        <div class="section-desc">BIS-11 impulsivity and sensation-seeking scales</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="Impulsive">
+        Impulsivity
+        <span class="q-hint">Acting without thinking; difficulty resisting urges</span>
+      </label>
+      <div class="slider-wrap">
+        <input type="range" name="Impulsive" id="Impulsive" min="1" max="10" value="5"
+               data-min="-2.55524" data-max="2.90161" required>
+        <span class="slider-val" id="Impulsive-val">5</span>
+      </div>
+      <div class="slider-labels"><span>Very Low</span><span>Very High</span></div>
+    </div>
+
+    <div class="q-card">
+      <label class="q-label" for="SS">
+        Sensation-Seeking
+        <span class="q-hint">Desire for novel, varied, intense experiences; willingness to take risks</span>
+      </label>
+      <div class="slider-wrap">
+        <input type="range" name="SS" id="SS" min="1" max="10" value="5"
+               data-min="-2.07848" data-max="1.92173" required>
+        <span class="slider-val" id="SS-val">5</span>
+      </div>
+      <div class="slider-labels"><span>Very Low</span><span>Very High</span></div>
+    </div>
+
+    <!-- Hidden fields that hold the mapped UCI values for sliders -->
+    <input type="hidden" name="Nscore_mapped"    id="Nscore_mapped">
+    <input type="hidden" name="Escore_mapped"    id="Escore_mapped">
+    <input type="hidden" name="Oscore_mapped"    id="Oscore_mapped">
+    <input type="hidden" name="Ascore_mapped"    id="Ascore_mapped">
+    <input type="hidden" name="Cscore_mapped"    id="Cscore_mapped">
+    <input type="hidden" name="Impulsive_mapped" id="Impulsive_mapped">
+    <input type="hidden" name="SS_mapped"        id="SS_mapped">
+
+    <div class="submit-wrap">
+      <button type="submit">Calculate Risk Score →</button>
+      <p class="submit-note">Results are generated by a Random Forest model trained on the UCI Drug Consumption dataset.</p>
+    </div>
+
+  </form>
+</main>
+
+<script>
+  const SLIDERS = ['Nscore','Escore','Oscore','Ascore','Cscore','Impulsive','SS'];
+
+  // Map 1–10 slider value to UCI quantified range
+  function mapToUCI(val, min, max) {
+    return min + ((val - 1) / 9) * (max - min);
+  }
+
+  // Update slider fill gradient and value label
+  function updateSlider(id) {
+    const el  = document.getElementById(id);
+    const pct = ((el.value - 1) / 9) * 100;
+    el.style.setProperty('--pct', pct + '%');
+    document.getElementById(id + '-val').textContent = el.value;
+    const mapped = mapToUCI(
+      parseFloat(el.value),
+      parseFloat(el.dataset.min),
+      parseFloat(el.dataset.max)
+    );
+    document.getElementById(id + '_mapped').value = mapped.toFixed(5);
+  }
+
+  SLIDERS.forEach(id => {
+    updateSlider(id);
+    document.getElementById(id).addEventListener('input', () => updateSlider(id));
+  });
+
+  // Progress tracker
+  function updateProgress() {
+    const selects  = document.querySelectorAll('select[required]');
+    let answered   = 0;
+    selects.forEach(s => { if (s.value) answered++; });
+    answered      += SLIDERS.length; // sliders always count
+    const total    = selects.length + SLIDERS.length;
+    const pct      = Math.round((answered / total) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = `${answered} / ${total} answered`;
+  }
+
+  document.querySelectorAll('select').forEach(s =>
+    s.addEventListener('change', updateProgress));
+  updateProgress();
+
+  // On submit: promote hidden mapped fields as the named values Django reads
+  document.getElementById('risk-form').addEventListener('submit', function() {
+    SLIDERS.forEach(id => {
+      document.getElementById(id).name = id + '_raw';
+      document.getElementById(id + '_mapped').name = id;
+    });
+  });
+</script>
+
+</body>
+</html>

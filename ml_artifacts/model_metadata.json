@@ -1,0 +1,23 @@
+{
+  "feature_cols": [
+    "Age",
+    "Gender",
+    "Education",
+    "Country",
+    "Ethnicity",
+    "Nscore",
+    "Escore",
+    "Oscore",
+    "Ascore",
+    "Cscore",
+    "Impulsive",
+    "SS"
+  ],
+  "risk_threshold": 0.45,
+  "model_type": "RandomForestClassifier",
+  "n_estimators": 300,
+  "max_depth": null,
+  "target": "cannabis_risk",
+  "dataset": "UCI Drug Consumption (Quantified)",
+  "auc_test": 0.855
+}

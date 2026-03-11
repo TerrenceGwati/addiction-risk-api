@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Assessment Result</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'riskapp/style.css' %}">
+</head>
+
+<body>
+
+<header>
+  <div class="badge">Assessment Complete</div>
+  <h1>Your Risk <em>Result</em></h1>
+</header>
+
+<main>
+
+  <!-- ── Risk hero card ────────────────────────────────────────────── -->
+  <div class="risk-hero" data-tier="{{ risk_band }}" id="risk-hero">
+
+    <div class="risk-eyebrow">Estimated Cannabis Risk Level</div>
+
+    <div class="risk-label">
+      {% if risk_band == "low" %}Low Risk
+      {% elif risk_band == "moderate" %}Moderate Risk
+      {% elif risk_band == "high" %}High Risk
+      {% elif risk_band == "very_high" %}Very High Risk
+      {% endif %}
+    </div>
+
+    <div class="risk-prob">
+      Risk probability: <strong>{{ risk_score|floatformat:3 }}</strong> &nbsp;/&nbsp; 1.000
+    </div>
+
+    <!-- Animated gauge -->
+    <div class="gauge-wrap">
+      <div class="gauge-track">
+        <div class="gauge-fill" id="gauge-fill" style="width: 0%"></div>
+      </div>
+      <div class="gauge-ticks">
+        <span>Low</span><span>Moderate</span><span>High</span><span>Very High</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Contextual explanation + resources ───────────────────────── -->
+  <div class="cards">
+
+    {% if risk_band == "low" %}
+
+      <div class="content-card">
+        <div class="card-heading"><span class="dot"></span>What this means</div>
+        <p>Your profile suggests a <strong>low level of cannabis addiction risk</strong> based on
+        personality and demographic factors. The Random Forest model found limited overlap with
+        patterns associated with regular or problematic use.</p>
+        <p style="margin-top:0.6rem">It is still worth staying informed — personality traits are
+        not the only factor in drug risk, and circumstances can change.</p>
+      </div>
+
+      <div class="content-card">
+        <div class="card-heading"><span class="dot"></span>Recommended resources</div>
+        <ul class="resource-list">
+          <li><a href="https://www.nhs.uk/live-well/addiction-support/drug-addiction-getting-help/" target="_blank">NHS: Drug addiction and getting help</a></li>
+          <li><a href="https://www.talktofrank.com/" target="_blank">Talk to FRANK — honest information about drugs</a></li>
+        </ul>
+      </div>
+
+    {% elif risk_band == "moderate" %}
+
+      <div class="content-card">
+        <div class="card-heading"><span class="dot"></span>What this means</div>
+        <p>Your profile shows <strong>moderate indicators of cannabis risk</strong>. Certain
+        personality traits — such as high openness or sensation-seeking — are associated with
+        elevated likelihood of drug experimentation and regular use in the research literature
+        (Fehrman et al., 2015).</p>
+        <p style="margin-top:0.6rem">This is a good time to reflect on habits and consider
+        speaking to a wellbeing adviser for guidance.</p>
+      </div>
+
+      <div class="content-card">
+        <div class="card-heading"><span class="dot"></span>Support options</div>
+        <ul class="resource-list">
+          <li><a href="https://www.talktofrank.com/" target="_blank">Talk to FRANK — self-help advice and support</a></li>
+          <li><a href="https://www.nhs.uk/mental-health/" target="_blank">NHS Mental Health — mood and anxiety support</a></li>
+          <li>Contact your <strong>university wellbeing service</strong> for confidential guidance.</li>
+        </ul>
+      </div>
+
+    {% elif risk_band == "high" %}
+
+      <div class="content-card">
+        <div class="card-heading"><span class="dot"></span>What this means</div>
+        <p>Your profile shows <strong>elevated risk indicators</strong>. Research links
+        combinations of high neuroticism, impulsivity, and sensation-seeking with increased
+        probability of problematic substance use. Country and age group were also significant
+        factors in the model's assessment.</p>
+        <p style="margin-top:0.6rem">We recommend seeking professional support to discuss these
+        findings — early intervention significantly improves outcomes.</p>
+      </div>
+
+      <div class="content-card">
+        <div class="card-heading"><span class="dot"></span>Immediate next steps</div>
+        <ul class="resource-list">
+          <li><strong>Speak to your GP</strong> about physical or mental health concerns related to substance use.</li>
+          <li><a href="https://www.nhs.uk/live-well/addiction-support/drug-addiction-getting-help/" target="_blank">Find specialist NHS drug services near you</a></li>
+          <li><a href="https://www.talktofrank.com/get-help" target="_blank">Talk to FRANK — find local drug treatment</a></li>
+          <li>Your <strong>university counselling service</strong> can offer confidential, non-judgemental support.</li>
+        </ul>
+      </div>
+
+    {% else %}{# very_high #}
+
+      <div class="content-card">
+        <div class="card-heading"><span class="dot"></span>What this means</div>
+        <p>Your profile shows <strong>very high risk indicators</strong> — the strongest
+        combination of personality and demographic factors associated with problematic cannabis
+        use in the research dataset. High sensation-seeking, openness, and impulsivity alongside
+        demographic factors place this profile in the highest risk tier.</p>
+        <p style="margin-top:0.6rem">Please reach out for professional support as soon as
+        possible. You do not have to manage this alone.</p>
+      </div>
+
+      <div class="content-card">
+        <div class="card-heading"><span class="dot"></span>Action recommended</div>
+        <ul class="resource-list">
+          <li><strong>Contact your GP urgently</strong> to discuss your wellbeing and next steps.</li>
+          <li><a href="https://www.nhs.uk/live-well/addiction-support/drug-addiction-getting-help/" target="_blank">NHS specialist drug addiction services</a></li>
+          <li><a href="https://www.talktofrank.com/get-help" target="_blank">Talk to FRANK — free, confidential helpline: 0300 123 6600</a></li>
+          <li><strong>In an emergency</strong>, contact emergency services on <strong>999</strong>.</li>
+        </ul>
+      </div>
+
+    {% endif %}
+
+  </div>{# .cards #}
+
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> This tool is an educational screening aid based on the UCI Drug
+    Consumption dataset and Big Five personality research (Fehrman et al., 2015). Predictions are
+    generated by a Random Forest classifier and do <strong>not</strong> constitute a medical
+    diagnosis. Results should be interpreted by a qualified professional and treated as one
+    indicative input among many.
+  </div>
+
+  <div class="back-wrap">
+    <a class="back-link" href="{% url 'riskapp:form' %}">← Return to Assessment</a>
+  </div>
+
+</main>
+
+<script>
+  window.addEventListener('load', () => {
+    const score = parseFloat("{{ risk_score }}") || 0;
+    const pct   = Math.min(Math.round(score * 100), 100);
+    setTimeout(() => {
+      document.getElementById('gauge-fill').style.width = pct + '%';
+    }, 300);
+  });
+</script>
+
+</body>
+</html>

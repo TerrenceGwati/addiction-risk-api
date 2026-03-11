@@ -1,0 +1,583 @@
+/* =============================================================================
+   Student Drug Risk Assessment — Shared Stylesheet
+   Covers: form.html + result.html
+   Font:   DM Serif Display (headings) + DM Sans (body)
+   Theme:  Dark navy / amber — clinical-editorial
+   Model:  Random Forest — tier boundaries: <0.30 / 0.30–0.55 / 0.55–0.75 / ≥0.75
+   ============================================================================= */
+
+/* ── Reset & base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Core palette */
+  --navy:      #0D1B2A;
+  --navy-mid:  #1A2E42;
+  --navy-card: #172336;
+  --amber:     #E8A020;
+  --amber-dim: #C4881A;
+  --slate:     #8BA3BB;
+  --white:     #F0F4F8;
+  --muted:     #4A6580;
+  --border:    rgba(139, 163, 187, 0.15);
+  --radius:    10px;
+
+  /* Risk tier colours */
+  --low-col:         #22C55E;
+  --low-bg:          rgba(34,  197, 94,  0.08);
+  --low-border:      rgba(34,  197, 94,  0.30);
+  --moderate-col:    #F59E0B;
+  --moderate-bg:     rgba(245, 158, 11,  0.08);
+  --moderate-border: rgba(245, 158, 11,  0.30);
+  --high-col:        #F97316;
+  --high-bg:         rgba(249, 115, 22,  0.08);
+  --high-border:     rgba(249, 115, 22,  0.30);
+  --veryhigh-col:    #EF4444;
+  --veryhigh-bg:     rgba(239, 68,  68,  0.08);
+  --veryhigh-border: rgba(239, 68,  68,  0.30);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  line-height: 1.6;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,160,32,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 90%  80%, rgba(232,160,32,0.04) 0%, transparent 60%);
+}
+
+/* ── Typography ────────────────────────────────────────────────────────────── */
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--white);
+  margin-bottom: 0.8rem;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+p {
+  font-size: 0.9rem;
+  color: var(--slate);
+  line-height: 1.65;
+}
+
+p strong {
+  color: var(--white);
+  font-weight: 500;
+}
+
+a {
+  color: var(--amber);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(232,160,32,0.3);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+a:hover {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+header {
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  animation: fadeDown 0.6s ease both;
+}
+
+.subtitle {
+  color: var(--slate);
+  font-size: 0.95rem;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* ── Badge ─────────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  background: rgba(232,160,32,0.12);
+  border: 1px solid rgba(232,160,32,0.3);
+  color: var(--amber);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.9rem;
+  border-radius: 100px;
+  margin-bottom: 1.2rem;
+}
+
+/* ── Main layout ───────────────────────────────────────────────────────────── */
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+/* ── Disclaimer banner ─────────────────────────────────────────────────────── */
+.disclaimer {
+  background: rgba(232,160,32,0.06);
+  border: 1px solid rgba(232,160,32,0.2);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  font-size: 0.78rem;
+  color: var(--slate);
+  line-height: 1.55;
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+
+/* on form page, disclaimer has margin-bottom */
+form ~ .disclaimer,
+.disclaimer:not(:last-of-type) { margin-bottom: 2rem; }
+
+/* on result page, disclaimer has margin-top */
+.cards + .disclaimer { margin-top: 1.5rem; }
+
+.disclaimer strong {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* ── Progress bar ──────────────────────────────────────────────────────────── */
+.progress-wrap {
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.5s 0.2s ease both;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 3px;
+  background: var(--navy-mid);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber-dim), var(--amber));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* ── Section headings ──────────────────────────────────────────────────────── */
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1.2rem;
+  animation: fadeUp 0.5s ease both;
+}
+
+.section-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(232,160,32,0.15);
+  border: 1px solid rgba(232,160,32,0.4);
+  color: var(--amber);
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--white);
+}
+
+.section-desc {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+
+/* ── Question card ─────────────────────────────────────────────────────────── */
+.q-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.5rem;
+  margin-bottom: 0.85rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  animation: fadeUp 0.45s ease both;
+}
+
+.q-card:hover     { border-color: rgba(232,160,32,0.25); box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+.q-card:focus-within { border-color: rgba(232,160,32,0.5); }
+
+.q-card:nth-child(1) { animation-delay: 0.05s; }
+.q-card:nth-child(2) { animation-delay: 0.10s; }
+.q-card:nth-child(3) { animation-delay: 0.15s; }
+.q-card:nth-child(4) { animation-delay: 0.20s; }
+.q-card:nth-child(5) { animation-delay: 0.25s; }
+
+.q-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 0.9rem;
+  line-height: 1.45;
+}
+
+.q-hint {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 300;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* ── Select dropdown ───────────────────────────────────────────────────────── */
+select {
+  width: 100%;
+  background: rgba(13,27,42,0.8);
+  border: 1px solid rgba(139,163,187,0.2);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  padding: 0.65rem 1rem;
+  border-radius: 7px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238BA3BB' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(232,160,32,0.12);
+}
+
+select option {
+  background: var(--navy-mid);
+  color: var(--white);
+}
+
+/* ── Range slider ──────────────────────────────────────────────────────────── */
+.slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.slider-wrap input[type="range"] {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--amber) 0%,
+    var(--amber) var(--pct, 50%),
+    rgba(139,163,187,0.2) var(--pct, 50%),
+    rgba(139,163,187,0.2) 100%
+  );
+  appearance: none;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.slider-wrap input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--amber);
+  border: 2px solid var(--navy);
+  box-shadow: 0 0 6px rgba(232,160,32,0.4);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.slider-wrap input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+.slider-wrap input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--amber);
+  border: 2px solid var(--navy);
+  cursor: pointer;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-top: 0.4rem;
+}
+
+.slider-val {
+  min-width: 2.5rem;
+  text-align: right;
+  font-size: 0.82rem;
+  color: var(--amber);
+  font-weight: 500;
+}
+
+/* ── Submit button ─────────────────────────────────────────────────────────── */
+.submit-wrap {
+  text-align: center;
+  margin-top: 2.5rem;
+  animation: fadeUp 0.5s ease both;
+}
+
+button[type="submit"] {
+  background: linear-gradient(135deg, var(--amber-dim), var(--amber));
+  color: var(--navy);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.9rem 3rem;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(232,160,32,0.3);
+}
+
+button[type="submit"]:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,160,32,0.4); }
+button[type="submit"]:active { transform: translateY(0); }
+
+.submit-note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.8rem;
+}
+
+/* ── Result — risk hero card ───────────────────────────────────────────────── */
+.risk-hero {
+  border-radius: 14px;
+  padding: 2.2rem 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  border: 1px solid;
+  animation: heroReveal 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.risk-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, var(--hero-glow, transparent), transparent 70%);
+  pointer-events: none;
+}
+
+.risk-hero[data-tier="low"]      { background: var(--low-bg);      border-color: var(--low-border);      --hero-glow: rgba(34,197,94,0.12);  }
+.risk-hero[data-tier="moderate"] { background: var(--moderate-bg); border-color: var(--moderate-border); --hero-glow: rgba(245,158,11,0.12); }
+.risk-hero[data-tier="high"]     { background: var(--high-bg);     border-color: var(--high-border);     --hero-glow: rgba(249,115,22,0.12); }
+.risk-hero[data-tier="very_high"]{ background: var(--veryhigh-bg); border-color: var(--veryhigh-border); --hero-glow: rgba(239,68,68,0.12);  }
+
+.risk-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+}
+
+.risk-label {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.risk-hero[data-tier="low"]       .risk-label { color: var(--low-col); }
+.risk-hero[data-tier="moderate"]  .risk-label { color: var(--moderate-col); }
+.risk-hero[data-tier="high"]      .risk-label { color: var(--high-col); }
+.risk-hero[data-tier="very_high"] .risk-label { color: var(--veryhigh-col); }
+
+.risk-prob { font-size: 0.85rem; color: var(--slate); }
+.risk-prob strong { color: var(--white); font-weight: 500; }
+
+/* ── Gauge bar ─────────────────────────────────────────────────────────────── */
+.gauge-wrap {
+  margin: 1.4rem auto 0;
+  max-width: 340px;
+}
+
+.gauge-track {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(139,163,187,0.12);
+  overflow: hidden;
+}
+
+.gauge-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+
+.risk-hero[data-tier="low"]       .gauge-fill { background: var(--low-col); }
+.risk-hero[data-tier="moderate"]  .gauge-fill { background: var(--moderate-col); }
+.risk-hero[data-tier="high"]      .gauge-fill { background: var(--high-col); }
+.risk-hero[data-tier="very_high"] .gauge-fill { background: var(--veryhigh-col); }
+
+.gauge-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-top: 0.35rem;
+}
+
+/* ── Content cards (result) ────────────────────────────────────────────────── */
+.content-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.8rem;
+  margin-bottom: 1rem;
+  animation: fadeUp 0.5s ease both;
+}
+
+.content-card + .content-card { animation-delay: 0.1s; }
+
+.card-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-heading .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.risk-hero[data-tier="low"]       ~ .cards .dot { background: var(--low-col); }
+.risk-hero[data-tier="moderate"]  ~ .cards .dot { background: var(--moderate-col); }
+.risk-hero[data-tier="high"]      ~ .cards .dot { background: var(--high-col); }
+.risk-hero[data-tier="very_high"] ~ .cards .dot { background: var(--veryhigh-col); }
+
+/* ── Resource list ─────────────────────────────────────────────────────────── */
+.resource-list {
+  list-style: none;
+  margin-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.resource-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.86rem;
+  color: var(--slate);
+}
+
+.resource-list li::before {
+  content: '→';
+  color: var(--amber);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.resource-list a {
+  color: var(--amber);
+  border-bottom: 1px solid rgba(232,160,32,0.3);
+}
+
+.resource-list a:hover {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+/* ── Back link ─────────────────────────────────────────────────────────────── */
+.back-wrap {
+  text-align: center;
+  margin-top: 2rem;
+  animation: fadeUp 0.5s 0.3s ease both;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--slate);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.4rem;
+  border-radius: 100px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--white);
+  border-color: rgba(139,163,187,0.4);
+}
+
+/* ── Animations ────────────────────────────────────────────────────────────── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroReveal {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* ── Mobile ────────────────────────────────────────────────────────────────── */
+@media (max-width: 500px) {
+  main                  { padding: 1.5rem 1rem 3rem; }
+  h1                    { font-size: 1.6rem; }
+  .content-card         { padding: 1.2rem; }
+  button[type="submit"] { padding: 0.8rem 2rem; }
+}
