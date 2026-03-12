@@ -80,7 +80,7 @@ The `notebooks/random_forest_model.ipynb` notebook:
 
 1. Loads and cleans the UCI Drug Consumption dataset
 2. Binarises the cannabis target (Non-user vs At-Risk)
-3. Trains and compares four models — Logistic Regression, Random Forest, MLP, KNN
+3. Trains Random Forest
 4. Selects Random Forest as the primary model (Recall: 0.916 · AUC-ROC: 0.863)
 5. Tunes the classification threshold to 0.45 to maximise recall
 6. Exports the trained model to `ml_artifacts/rf_cannabis_model.joblib`
@@ -103,7 +103,7 @@ Download `drug_consumption.data` from the link above and place it in the
 Full endpoint reference, parameter specifications, request/response examples,
 and error codes are documented in:
 
-
+📄 **[API_DOCUMENTATION.pdf](./API_DOCUMENTATION.pdf)**
 
 ### Endpoint Summary
 
