@@ -1,6 +1,6 @@
 # Student Cannabis Addiction Risk Prediction API
 
-**COMP3011 — Web Services and Web Data | University of Leeds 2025–2026**
+
 
 A Django web API that predicts cannabis addiction risk in students using a
 Random Forest classifier trained on the UCI Drug Consumption dataset

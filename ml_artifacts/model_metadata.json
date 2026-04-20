@@ -15,7 +15,7 @@
   ],
   "risk_threshold": 0.45,
   "model_type": "RandomForestClassifier",
-  "n_estimators": 300,
+  "n_estimators": 200,
   "max_depth": null,
   "target": "cannabis_risk",
   "dataset": "UCI Drug Consumption (Quantified)",
