@@ -1,4 +1,4 @@
-# Student Cannabis Addiction Risk Prediction API
+# Student Drug Addiction Risk Prediction API
 
 **COMP3011 — Web Services and Web Data | University of Leeds 2025–2026**
 
