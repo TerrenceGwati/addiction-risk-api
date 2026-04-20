@@ -1,7 +1,5 @@
 # Student Cannabis Addiction Risk Prediction API
 
-
-
 A Django web API that predicts cannabis addiction risk in students using a
 Random Forest classifier trained on the UCI Drug Consumption dataset
 (Fehrman et al., 2015). The system accepts a 12-question personality and
@@ -22,23 +20,36 @@ running the app. See **[Generating the Model](#generating-the-model)** below.
 
 ## Setup Instructions
 
-### 1. Clone the repository
+ **Recommended:** Run locally. Codespaces requires additional steps
+ to generate the model file — see the Codespaces section below.
+
+### Local setup (recommended)
+
+**1. Clone the repository**
 ```bash
 git clone https://github.com/TerrenceGwati/addiction-risk-api.git
 cd addiction-risk-api
 ```
 
-### 2. Create and activate a conda environment
+**2. Create and activate environment**
 ```bash
+# Option A — conda (recommended)
 conda create -n addiction-risk python=3.11
 conda activate addiction-risk
+
+# Option B — venv
+python -m venv venv
+source venv/bin/activate
 ```
 
-### 3. Install dependencies
+**3. Install dependencies**
 ```bash
-pip install django scikit-learn pandas joblib numpy jupyter
+pip install -r requirements.txt
 ```
 
+**4. Generate the model**
+
+Open and run all cells in:
 ### 4. Generate the model
 ```bash
 # Download the dataset first (see Dataset section below)
@@ -97,13 +108,6 @@ Download `drug_consumption.data` from the link above and place it in the
 `notebooks/` folder before running the notebook.
 
 ---
-
-## API Documentation
-
-Full endpoint reference, parameter specifications, request/response examples,
-and error codes are documented in:
-
-📄 **[API_DOCUMENTATION.pdf](./API_DOCUMENTATION.pdf)**
 
 ### Endpoint Summary
 
