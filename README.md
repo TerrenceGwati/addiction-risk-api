@@ -1,6 +1,6 @@
 # Student Drug Addiction Risk Prediction API
 
-**COMP3011 — Web Services and Web Data | University of Leeds 2025–2026**
+
 
 A Django web API that predicts cannabis addiction risk in students using a
 Random Forest classifier trained on the UCI Drug Consumption dataset
@@ -98,12 +98,7 @@ Download `drug_consumption.data` from the link above and place it in the
 
 ---
 
-## API Documentation
 
-Full endpoint reference, parameter specifications, request/response examples,
-and error codes are documented in:
-
-📄 **[API_DOCUMENTATION.pdf](./API_DOCUMENTATION.pdf)**
 
 ### Endpoint Summary
 
